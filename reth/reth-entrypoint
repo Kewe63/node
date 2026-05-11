@@ -45,8 +45,8 @@ case "$LOG_LEVEL" in
         LOG_LEVEL="vvvvv"
         ;;
     *)
-        echo "Unknown log level: $LOG_LEVEL"
-        LOG_LEVEL="vvv"
+        echo "Unknown log level: $LOG_LEVEL" >&2
+        exit 1
         ;;
 esac
 
@@ -127,6 +127,12 @@ if [[ "$RETH_HISTORICAL_PROOFS" == "true" && -n "$RETH_HISTORICAL_PROOFS_STORAGE
 fi
 
 mkdir -p "$RETH_DATA_DIR"
+
+# Advertise public IP for better P2P peer discovery behind NAT
+if [ "${HOST_IP:+x}" = x ]; then
+    ADDITIONAL_ARGS="$ADDITIONAL_ARGS --nat=extip:$HOST_IP"
+fi
+
 echo "Starting reth with additional args: $ADDITIONAL_ARGS"
 echo "$BASE_NODE_L2_ENGINE_AUTH_RAW" > "$BASE_NODE_L2_ENGINE_AUTH"
 
