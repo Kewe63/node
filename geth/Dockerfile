@@ -38,6 +38,7 @@ COPY --from=op /app/op-node/bin/op-node ./
 COPY --from=geth /app/build/bin/geth ./
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY geth/geth-entrypoint ./execution-entrypoint
+COPY helpers.sh .
 COPY op-node-entrypoint .
 COPY consensus-entrypoint .
 
